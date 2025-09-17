@@ -1,8 +1,20 @@
 import { useState } from "react";
+import { registProduct } from "../../utils/ProductApi";
 
 export default function ProductForm(){
     const [files, setFiles]=useState([]); //업로드 할 대상 배열 
     const [previews, setPreviews]=useState([]); //미리보기 할 대상 배열 
+
+    //폼양식의 파라미터 들 
+    const [formData, setFormData]=useState({
+        subCategoryId:0,
+        product_name:"",
+        brand:"",
+        price:0,
+        discount:0,
+        detail:""
+    });
+
     
     //const [numbers, setNumbers]  =useState([1,2]);
     //setNumbers((prev)=>[ ...prev, 3]);
@@ -51,36 +63,54 @@ export default function ProductForm(){
 
     /*서버에 파일 업로드 */
     const upload=async ()=>{
-        await axios.post("");     
+        //text 뿐 아니라, 파일을 포함한 파라미터를 전송할때는 FormData 이용할 수 있음
+        //FormData 객체 안에 append() 이용하여 키-value 쌍으로 데이터 넣기 
+        const sendData = new FormData();
 
+        sendData.append("subCategoryDTO.subCategoryId", formData.subCategoryId);
+        sendData.append("productName", formData.product_name);
+        sendData.append("brand", formData.brand);
+        sendData.append("price", formData.price);
+        sendData.append("discount", formData.discount);
+        sendData.append("detail", formData.detail);
+        
+        //바이너리 파일추가..(배열의 수만큼 반복하면서 sendData에 넣기)
+        files.forEach((file)=> sendData.append("files", file)); 
+        registProduct(sendData);
+    }
+
+    const handleInput = (e)=>{
+        // [이벤트 발생 주체]:그 주체의 값
+        setFormData({...formData, [e.target.name]:e.target.value});
     }
 
     return (
     <div className="card-body">
         <div className="form-group">
-            <select className="form-control" name="topcategory_id" >
+            <select className="form-control" name="topcategory_id" onChange={handleInput}>
                 <option value="">상위 카테고리 선택</option>        
             </select>
         </div>
         <div className="form-group">                       
-            <select className="form-control" name="subcategory_id" >
+            <select className="form-control" name="subCategoryId"  onChange={handleInput}>
                 <option value="">하위 카테고리 선택</option>        
+                <option value="1">운동화</option>        
             </select>
         </div>
         <div className="form-group">
-            <input type="text" className="form-control" name="product_name" placeholder="상품명"/>
+            <input type="text" className="form-control" name="product_name" placeholder="상품명"  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <input type="text" className="form-control" name="brand" placeholder="브랜드"/>
+            <input type="text" className="form-control" name="brand" placeholder="브랜드"  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <input type="number" className="form-control" name="brand" placeholder="가격"/>
+            <input type="number" className="form-control" name="price" placeholder="가격"  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <input type="number" className="form-control" name="brand" placeholder="할인가"/>
+            <input type="number" className="form-control" name="discount" placeholder="할인가"  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <textarea className="form-control" name="detail" placeholder="상세설명"></textarea>
+            <textarea className="form-control" name="detail" placeholder="상세설명"  onChange={handleInput}></textarea>
         </div>
 
         <div className="form-group">
