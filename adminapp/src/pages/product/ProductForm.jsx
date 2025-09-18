@@ -76,7 +76,15 @@ export default function ProductForm(){
         
         //바이너리 파일추가..(배열의 수만큼 반복하면서 sendData에 넣기)
         files.forEach((file)=> sendData.append("files", file)); 
-        registProduct(sendData);
+        
+        registProduct(sendData)
+        .then( res=>{ //서버로부터 응답정보가 올경우 응답정보를 출력해보기
+            console.log("서버로 부터 응답받은 정보는 ",res);        
+        })
+        .catch(err=>{
+            console.log("에러발생", err);
+        });
+
     }
 
     const handleInput = (e)=>{
@@ -94,7 +102,7 @@ export default function ProductForm(){
         <div className="form-group">                       
             <select className="form-control" name="subCategoryId"  onChange={handleInput}>
                 <option value="">하위 카테고리 선택</option>        
-                <option value="1">운동화</option>        
+                <option value="17">김치찌게</option>        
             </select>
         </div>
         <div className="form-group">
