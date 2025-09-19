@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 
 import ProductList from './pages/product/ProductList'
 import ProductForm from './pages/product/ProductForm'
+import ProductDetail from './pages/product/ProductDetail'
 import OrderList from './pages/order/OrderList'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Routes>
               {/* 상품관련 */}
               <Route path="/product/list" element={<ProductList/>}/>
+              <Route path="/product/detail/:productId" element={<ProductDetail/>}/>
               <Route path="/product/registform" element={<ProductForm/>}/>
 
               {/* 주문관련 */}

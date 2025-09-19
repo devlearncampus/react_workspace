@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { registProduct } from "../../utils/ProductApi";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getProduct } from "../../utils/ProductApi";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function ProductForm(){
+export default function ProductDetail(){
+
+    const {productId}=useParams(); //추출한 변수 받기
+    console.log("넘겨받은 productId=", productId);
 
     const navigate=useNavigate();//location.href 를 대신함 
-
     const [files, setFiles]=useState([]); //업로드 할 대상 배열 
     const [previews, setPreviews]=useState([]); //미리보기 할 대상 배열 
 
@@ -19,9 +21,28 @@ export default function ProductForm(){
         detail:""
     });
 
-    
-    //const [numbers, setNumbers]  =useState([1,2]);
-    //setNumbers((prev)=>[ ...prev, 3]);
+    /* 최초 한번 상세보기 요청을시도하여 화면에 반영*/
+    const getDetail=async ()=>{
+        const res= await getProduct(productId);
+        console.log("서버에서 가져온 상세 데이터는 ", res);
+        const product=res.data.result;
+
+        setFormData({
+            subCategoryId:product.subCategoryDTO.subCategoryId,
+            product_name:product.produtName,
+            brand:product.brand,
+            price:product.price,
+            discount:product.discount,
+            detail:product.detail
+        });
+    }
+
+    //사이드 이펙트 함수(부수효과: 최초 한번 호출시, 렌더링 할때 호출 시)
+    useEffect(()=>{
+        getDetail();        
+    }, [productId]);
+
+
 
     //이전과 동일한 파일을 선택할 경우, 이벤트는 발생하지 않음    
     const handleFileChange=(e)=>{
@@ -112,19 +133,19 @@ export default function ProductForm(){
             </select>
         </div>
         <div className="form-group">
-            <input type="text" className="form-control" name="product_name" placeholder="상품명"  onChange={handleInput}/>
+            <input type="text" className="form-control" name="product_name" value={formData.productName}  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <input type="text" className="form-control" name="brand" placeholder="브랜드"  onChange={handleInput}/>
+            <input type="text" className="form-control" name="brand" value={formData.brand}  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <input type="number" className="form-control" name="price" placeholder="가격"  onChange={handleInput}/>
+            <input type="number" className="form-control" name="price" value={formData.price}  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <input type="number" className="form-control" name="discount" placeholder="할인가"  onChange={handleInput}/>
+            <input type="number" className="form-control" name="discount" value={formData.discount}  onChange={handleInput}/>
         </div>
         <div className="form-group">
-            <textarea className="form-control" name="detail" placeholder="상세설명"  onChange={handleInput}></textarea>
+            <textarea className="form-control" name="detail" value={formData.detail}  onChange={handleInput}></textarea>
         </div>
 
         <div className="form-group">

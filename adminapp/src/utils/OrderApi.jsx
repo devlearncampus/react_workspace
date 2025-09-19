@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //주문 관련 공통 URL
-const URL="http://localhost:7777/orders";
+const URL="http://localhost:7777/productapp/orders";
 
 export const getOrders=()=>axios.get(URL);//주문목록
 export const registOrder=(data)=>axios.post(URL, data);//주문등록

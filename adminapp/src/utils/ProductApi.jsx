@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //상품관련 공통 URL
-const URL="http://localhost:7777/products";
+const URL="http://localhost:7777/productapp/products";
 
 export const getProducts=()=>axios.get(URL);//상품목록
 export const registProduct=(data)=>axios.post(URL, data,{

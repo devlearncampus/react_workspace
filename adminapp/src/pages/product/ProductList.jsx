@@ -1,5 +1,6 @@
 import { useState, useEffect} from "react";
 import {getProducts}  from "../../utils/ProductApi";
+import { Link } from "react-router-dom";
 
 export default function ProductList(){
     const [productList, setProductList]=useState([]);
@@ -9,7 +10,7 @@ export default function ProductList(){
         console.log("상품 목록 요청할꺼야");
         const response=await getProducts(); //response.data 가 json임
         console.log("서버에서 받아온 결과 response ", response);
-        setProductList(response.data);
+        setProductList(response.data.result);
     }
 
     useEffect(()=>{
@@ -41,25 +42,35 @@ export default function ProductList(){
                 <table className="table table-hover text-nowrap">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>User</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Reason</th>
+                      <th>No</th>
+                      <th>이미지</th>
+                      <th>카테고리</th>
+                      <th>상품명</th>
+                      <th>브랜드</th>
+                      <th>가격</th>
+                      <th>할인가</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {productList.map(product=>(
+                    {productList.map(product=>{
+                      //console.log(`${product.productFileList[0].fileName}`);
+                    return (
                     <tr>
                       <td>183</td>
-                      <td>John Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span className="tag tag-success">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                      <td>
+                        <img src={`http://localhost:7777/productapp/resource/p${product.productId}/${product.productFileList[0].fileName}`}  style={{width:"35px"}}/>
+                      </td>
+                      <td>{product.subCategoryDTO.subName}</td>
+                      <td>
+                        <Link to={`/product/detail/${product.productId}`}>{product.productName}</Link>
+                      </td>
+                      <td>{product.brand}</td>
+                      <td>{product.price}</td>
+                      <td>{product.discount}</td>
                     </tr>
-                    ))}
+                    )})}
                     <tr>
-                        <td colSpan={5}>
+                        <td colSpan={7}>
                             <button type="button">상품등록</button>
                             <button type="button" onClick={()=>{
                                 getProductList();
