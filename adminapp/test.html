@@ -11,30 +11,33 @@
             reject("서버와의 통신 실패");   //Promise의 상태를 실패로 처리함과 동시에 catch() 를 호출
         },3000 );          
     });
-    /*
+  /*
     p.then( (msg)=>{
         console.log(msg);
     }).catch( (err)=>{
         console.log(err);
     });
-    */
+*/
 
     //Promise를 좀더 편하게 사용하려면?  async/await 를 사용할 수 있다. 
     //async 키워드가 run() 함수는 절대로 비동기 함수가 아니다..
     //async 는  Promise를 사용하기 쉽게 제공되는, 또 하나의 방법 
     //async가 붙여진 함수는 반드시, Promise를 반환한다는 의미일 뿐이다!!
     console.log("1");
-
     async function run(){
         //return 5; //Promise.resolve(5);
         //run() 내에서 Promise 사용하자 
         //await p;
         try{
             console.log("2");
-            await p;  // await p가 resolve 될때까지 대기..  
+            const msg=await p;  // await p가 resolve 될때까지 대기..  
+            console.log("3 성공", msg);
         }catch(err){
-
+            console.log("실패", err);
         }
+        console.log("4");
     }
-
+    console.log("5");
+    run();
+    console.log("6");
 </script>
